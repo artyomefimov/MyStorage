@@ -6,19 +6,20 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import com.artyomefimov.mystorage.App
 import com.artyomefimov.mystorage.R
 import com.artyomefimov.mystorage.model.Product
 import com.artyomefimov.mystorage.presenter.detail.ProductDetailContract
 import com.artyomefimov.mystorage.presenter.detail.ProductDetailPresenter
 import com.artyomefimov.mystorage.view.detail.viewstate.ViewState
-import com.artyomefimov.mystorage.view.utils.*
+import com.artyomefimov.mystorage.view.utils.loadImageFrom
+import com.artyomefimov.mystorage.view.utils.showSnackbarWithAction
+import com.artyomefimov.mystorage.view.utils.showSnackbarWithMessage
 import kotlinx.android.synthetic.main.fragment_product_detail.*
 
 class ProductDetailFragment : Fragment(), ProductDetailContract.View {
     companion object {
         private const val PRODUCT = "product"
-        private const val VIEW_STATE = "view_state"
+        internal const val VIEW_STATE = "view_state"
         internal const val PICK_IMAGE_REQUEST_CODE = 1201
 
         @JvmStatic
@@ -30,7 +31,7 @@ class ProductDetailFragment : Fragment(), ProductDetailContract.View {
             }
     }
 
-    private lateinit var productPresenter: ProductDetailPresenter
+    internal lateinit var productPresenter: ProductDetailPresenter
     internal lateinit var initialViewState: ViewState
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,12 +39,9 @@ class ProductDetailFragment : Fragment(), ProductDetailContract.View {
 
         val product = arguments?.getSerializable(PRODUCT) as Product
 
-        productPresenter = ProductDetailPresenter(product, App.repository(activity!!))
+        initPresenter(product)
 
-        val viewStateFromBundle = savedInstanceState?.getSerializable(VIEW_STATE)
-        initialViewState = if (viewStateFromBundle != null) {
-            viewStateFromBundle as ViewState
-        } else ViewState.StableState
+        getInitialViewStateFrom(savedInstanceState)
 
         setHasOptionsMenu(true)
     }
@@ -149,7 +147,10 @@ class ProductDetailFragment : Fragment(), ProductDetailContract.View {
         if (PICK_IMAGE_REQUEST_CODE == requestCode) {
             val imagePathUri = resultIntent?.data!!
 
-            activity!!.contentResolver.takePersistableUriPermission(imagePathUri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            activity!!.contentResolver.takePersistableUriPermission(
+                imagePathUri,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
             loadImageFrom(activity!!, imagePathUri, product_image_view)
             productPresenter.setProductImagePath(imagePathUri.toString())
         }

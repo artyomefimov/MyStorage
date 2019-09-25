@@ -13,7 +13,8 @@ import com.artyomefimov.mystorage.presenter.list.ProductListContract
 import com.artyomefimov.mystorage.presenter.list.ProductListPresenter
 import com.artyomefimov.mystorage.view.MainActivity
 import com.artyomefimov.mystorage.view.detail.ProductDetailFragment
-import com.artyomefimov.mystorage.view.utils.*
+import com.artyomefimov.mystorage.view.utils.loadImageFrom
+import com.artyomefimov.mystorage.view.utils.showSnackbarWithMessage
 import kotlinx.android.synthetic.main.fragment_product_list.*
 
 class ProductListFragment : Fragment(), ProductListContract.View {
@@ -68,7 +69,7 @@ class ProductListFragment : Fragment(), ProductListContract.View {
                 onItemClickAction = { product ->
                     openProductFragmentFor(product)
                 },
-                loadImage = {product, imageView ->
+                loadImage = { product, imageView ->
                     loadImageFrom(activity!!, Uri.parse(product.imagePath), imageView)
                 })
         } else {

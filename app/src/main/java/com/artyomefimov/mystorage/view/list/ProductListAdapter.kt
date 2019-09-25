@@ -1,6 +1,5 @@
 package com.artyomefimov.mystorage.view.list
 
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +7,6 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.artyomefimov.mystorage.R
 import com.artyomefimov.mystorage.model.Product
-import com.artyomefimov.mystorage.view.utils.loadImageFrom
 import kotlinx.android.synthetic.main.list_item_product.view.*
 
 class ProductListAdapter(

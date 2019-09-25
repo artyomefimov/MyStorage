@@ -1,11 +1,26 @@
 package com.artyomefimov.mystorage.view.detail
 
-import android.content.ContentResolver
 import android.content.Intent
+import android.os.Bundle
 import android.view.MenuItem
+import com.artyomefimov.mystorage.App
+import com.artyomefimov.mystorage.model.Product
+import com.artyomefimov.mystorage.presenter.detail.ProductDetailPresenter
 import com.artyomefimov.mystorage.view.detail.viewstate.ViewState
 import com.artyomefimov.mystorage.view.detail.viewstate.applyNewStateFor
 import kotlinx.android.synthetic.main.fragment_product_detail.*
+
+internal fun ProductDetailFragment.initPresenter(product: Product) {
+    productPresenter = ProductDetailPresenter(product, App.repository(activity!!))
+}
+
+internal fun ProductDetailFragment.getInitialViewStateFrom(savedInstanceState: Bundle?) {
+    val viewStateFromBundle = savedInstanceState?.getSerializable(ProductDetailFragment.VIEW_STATE)
+
+    initialViewState = if (viewStateFromBundle != null) {
+        viewStateFromBundle as ViewState
+    } else ViewState.StableState
+}
 
 internal fun ProductDetailFragment.applyChangedState(changedState: ViewState, editItem: MenuItem?) {
     initialViewState = changedState

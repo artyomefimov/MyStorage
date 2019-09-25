@@ -11,6 +11,7 @@ abstract class ProductDatabase : RoomDatabase() {
     abstract fun productDao(): ProductDao
 
     companion object {
+        private const val DB_NAME = "product_database"
         @Volatile
         private var INSTANCE: ProductDatabase? = null
 
@@ -23,7 +24,7 @@ abstract class ProductDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     ProductDatabase::class.java,
-                    "product_database"
+                    DB_NAME
                 ).build()
                 INSTANCE = instance
                 return instance

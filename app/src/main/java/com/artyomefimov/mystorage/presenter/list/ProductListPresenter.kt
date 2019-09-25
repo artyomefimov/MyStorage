@@ -19,11 +19,11 @@ class ProductListPresenter(
         subscription = productRepository.findAll()
             .doOnSubscribe { view.showProgress(true) }
             .subscribe(
-                {products ->
+                { products ->
                     view.showProgress(false)
                     view.loadDataSuccess(products)
                 },
-                {e ->
+                { e ->
                     view.showProgress(false)
                     view.showMessage(e.message!!)
                 }
