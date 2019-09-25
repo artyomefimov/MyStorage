@@ -6,5 +6,9 @@ class BaseContract {
         fun detach()
     }
 
-    interface View
+    interface View {
+        fun showProgress(isNeedToShow: Boolean)
+        fun showMessage(message: String)
+        fun showMessage(messageResId: Int)
+    }
 }

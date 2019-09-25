@@ -25,7 +25,7 @@ class ProductListPresenter(
                 },
                 {e ->
                     view.showProgress(false)
-                    view.showErrorMessage(e.message!!)
+                    view.showMessage(e.message!!)
                 }
             )
     }

@@ -1,6 +1,5 @@
 package com.artyomefimov.mystorage.database
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.artyomefimov.mystorage.model.Product
 

@@ -12,6 +12,7 @@ import com.artyomefimov.mystorage.presenter.list.ProductListContract
 import com.artyomefimov.mystorage.presenter.list.ProductListPresenter
 import com.artyomefimov.mystorage.view.MainActivity
 import com.artyomefimov.mystorage.view.detail.ProductDetailFragment
+import com.artyomefimov.mystorage.view.utils.showSnackbarWithMessage
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_product_list.*
 
@@ -21,7 +22,7 @@ class ProductListFragment : Fragment(), ProductListContract.View {
         fun newInstance() = ProductListFragment()
     }
 
-    lateinit var listPresenter: ProductListPresenter
+    private lateinit var listPresenter: ProductListPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,18 +50,16 @@ class ProductListFragment : Fragment(), ProductListContract.View {
         listPresenter.loadProducts()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        listPresenter.detach()
-    }
-
     override fun showProgress(isNeedToShow: Boolean) {
         progress_bar.visibility = if (isNeedToShow) View.VISIBLE else View.GONE
     }
 
-    override fun showErrorMessage(message: String) {
-        Snackbar.make(view!!, message, Snackbar.LENGTH_LONG)
-            .show()
+    override fun showMessage(message: String) {
+        showSnackbarWithMessage(message)
+    }
+
+    override fun showMessage(messageResId: Int) {
+        showSnackbarWithMessage(messageResId)
     }
 
     override fun loadDataSuccess(products: List<Product>) {
@@ -80,5 +79,10 @@ class ProductListFragment : Fragment(), ProductListContract.View {
             val mainActivity = this.activity as MainActivity
             mainActivity.replaceFragment(ProductDetailFragment.newInstance(product))
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        listPresenter.detach()
     }
 }

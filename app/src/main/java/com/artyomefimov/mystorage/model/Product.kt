@@ -7,7 +7,7 @@ import java.io.Serializable
 
 @Entity(tableName = "product")
 class Product (
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") var id: Long = -1,
+    @PrimaryKey @ColumnInfo(name = "id") var id: String = "",
     @ColumnInfo(name = "name") var name: String = "",
     @ColumnInfo(name = "price") var price: Double = 0.0,
     @ColumnInfo(name = "imagePath") var imagePath: String = ""

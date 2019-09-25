@@ -1,4 +1,13 @@
 <resources>
     <string name="app_name">My Storage</string>
-    <string name="title_item_detail">Item Detail</string>
+    <string name="edit_menu_item">Edit</string>
+    <string name="delete_menu_item">Delete</string>
+
+    <string name="confirm_deletion_message">Confirm deletion</string>
+    <string name="incorrect_name">Name should not be empty or blank!</string>
+    <string name="incorrect_price">Price should be a number!</string>
+    <string name="success_message">Successfully!</string>
+    <string name="product_name_hint">Type a product name…</string>
+    <string name="product_price_hint">Type a product price…</string>
+    <string name="product_is_new">You can not delete a non-existing product!</string>
 </resources>

@@ -5,8 +5,6 @@ import com.artyomefimov.mystorage.presenter.BaseContract
 
 interface ProductListContract {
     interface View: BaseContract.View {
-        fun showProgress(isNeedToShow: Boolean)
-        fun showErrorMessage(message: String)
         fun loadDataSuccess(products: List<Product>)
     }
 
