@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Мой склад</string>
+    <string name="confirm_deletion_message">Подтвердите удаление</string>
+    <string name="delete_menu_item">Удалить</string>
+    <string name="edit_menu_item">Изменить</string>
+    <string name="incorrect_name">Название продукта не должно быть пустым или состоять из пробелов!</string>
+    <string name="incorrect_price">Цена должна быть числом!</string>
+    <string name="product_is_new">Нелья удалить еще не созданный продукт</string>
+    <string name="product_name">Название продукта</string>
+    <string name="product_name_hint">Введите название продукта…</string>
+    <string name="product_price">Цена</string>
+    <string name="product_price_hint">Введите цену продукта…</string>
+    <string name="success_message">Сохранено успешно</string>
+</resources>

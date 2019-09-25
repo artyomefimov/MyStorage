@@ -10,7 +10,6 @@
     <string name="product_name_hint">Type a product name…</string>
     <string name="product_price_hint">Type a product price…</string>
     <string name="product_is_new">You can not delete a non-existing product!</string>
-    <string name="no_permissions_message">Images can not be loaded without storage permission!</string>
 
     <string name="product_name">Product name</string>
     <string name="product_price">Price</string>
