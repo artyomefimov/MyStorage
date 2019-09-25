@@ -22,8 +22,7 @@
             android:id="@+id/list_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/text_margin"
-            android:layout_marginRight="@dimen/text_margin"
+
             app:layoutManager="LinearLayoutManager"
             tools:listitem="@layout/list_item_product" />
     </FrameLayout>
