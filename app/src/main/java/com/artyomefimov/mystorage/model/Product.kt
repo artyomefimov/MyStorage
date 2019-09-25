@@ -1,12 +1,14 @@
 package com.artyomefimov.mystorage.model
 
-import io.realm.RealmObject
-import io.realm.annotations.PrimaryKey
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.io.Serializable
 
-open class Product (
-    @PrimaryKey var id: String = "",
-    var name: String = "",
-    var price: Double = 0.0,
-    var imagePath: String = ""
-): RealmObject(), Serializable
+@Entity(tableName = "product")
+class Product (
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") var id: Long = -1,
+    @ColumnInfo(name = "name") var name: String = "",
+    @ColumnInfo(name = "price") var price: Double = 0.0,
+    @ColumnInfo(name = "imagePath") var imagePath: String = ""
+): Serializable

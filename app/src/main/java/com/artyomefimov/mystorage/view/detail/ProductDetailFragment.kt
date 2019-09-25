@@ -7,15 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.artyomefimov.mystorage.App
 import com.artyomefimov.mystorage.R
 import com.artyomefimov.mystorage.model.Product
 import com.artyomefimov.mystorage.presenter.detail.ProductDetailContract
 import com.artyomefimov.mystorage.presenter.detail.ProductDetailPresenter
 import kotlinx.android.synthetic.main.fragment_product_detail.*
+import javax.inject.Inject
 
-class ProductDetailFragment(
-    private val productPresenter: ProductDetailPresenter = ProductDetailPresenter()
-) : Fragment(), ProductDetailContract.View {
+class ProductDetailFragment : Fragment(), ProductDetailContract.View {
     companion object {
         private const val PRODUCT = "product"
 
@@ -28,11 +28,15 @@ class ProductDetailFragment(
             }
     }
 
+    lateinit var productPresenter: ProductDetailPresenter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val product = arguments?.getSerializable(PRODUCT) as Product
         toolbar_layout?.title = product.name
+
+        productPresenter = ProductDetailPresenter(App.repository(activity!!))
 
         productPresenter.product = product
     }

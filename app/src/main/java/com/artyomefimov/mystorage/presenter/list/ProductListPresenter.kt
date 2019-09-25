@@ -1,10 +1,12 @@
 package com.artyomefimov.mystorage.presenter.list
 
-import com.artyomefimov.mystorage.model.Product
-import io.realm.Realm
-import io.realm.RealmResults
+import com.artyomefimov.mystorage.repository.ProductRepository
+import io.reactivex.disposables.Disposable
 
-class ProductListPresenter : ProductListContract.Presenter {
+class ProductListPresenter(
+    private val productRepository: ProductRepository,
+    private var subscription: Disposable? = null
+) : ProductListContract.Presenter {
 
     private lateinit var view: ProductListContract.View
 
@@ -14,19 +16,21 @@ class ProductListPresenter : ProductListContract.Presenter {
     }
 
     override fun loadProducts() {
-        var products: RealmResults<Product>? = null
-        Realm.getDefaultInstance().use { realm ->
-            realm.executeTransaction {
-                products = realm.where(Product::class.java)
-                    .findAllAsync()
-            }
-            products?.addChangeListener { products ->
-                view.loadDataSuccess(products)
-            }
-        }
+        subscription = productRepository.findAll()
+            .doOnSubscribe { view.showProgress(true) }
+            .subscribe(
+                {products ->
+                    view.showProgress(false)
+                    view.loadDataSuccess(products)
+                },
+                {e ->
+                    view.showProgress(false)
+                    view.showErrorMessage(e.message!!)
+                }
+            )
     }
 
     override fun detach() {
-
+        subscription?.dispose()
     }
 }

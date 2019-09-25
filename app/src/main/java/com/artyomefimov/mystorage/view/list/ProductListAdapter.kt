@@ -6,20 +6,21 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.artyomefimov.mystorage.R
 import com.artyomefimov.mystorage.model.Product
-import io.realm.RealmRecyclerViewAdapter
-import io.realm.RealmResults
 import kotlinx.android.synthetic.main.list_item_product.view.*
 
 class ProductListAdapter(
-    private var productList: RealmResults<Product>,
-    private val onItemClickAction: (product: Product) -> Unit) :
-    RealmRecyclerViewAdapter<Product, ProductListViewHolder>(productList, true) {
+    var productList: List<Product>,
+    private val onItemClickAction: (product: Product) -> Unit
+) :
+    RecyclerView.Adapter<ProductListViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductListViewHolder {
         val itemView = LayoutInflater.from(parent.context)
             .inflate(R.layout.list_item_product, parent, false)
         return ProductListViewHolder(itemView, onItemClickAction)
     }
+
+    override fun getItemCount(): Int = productList.size
 
     override fun onBindViewHolder(holder: ProductListViewHolder, position: Int) =
         holder.bind(productList[position])

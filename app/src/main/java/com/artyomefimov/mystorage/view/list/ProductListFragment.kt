@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.artyomefimov.mystorage.App
 import com.artyomefimov.mystorage.R
 import com.artyomefimov.mystorage.model.Product
 import com.artyomefimov.mystorage.presenter.list.ProductListContract
@@ -12,40 +13,37 @@ import com.artyomefimov.mystorage.presenter.list.ProductListPresenter
 import com.artyomefimov.mystorage.view.MainActivity
 import com.artyomefimov.mystorage.view.detail.ProductDetailFragment
 import com.google.android.material.snackbar.Snackbar
-import io.realm.Realm
-import io.realm.RealmResults
 import kotlinx.android.synthetic.main.fragment_product_list.*
-import java.util.*
 
-class ProductListFragment(
-    private val listPresenter: ProductListPresenter = ProductListPresenter()
-) : Fragment(), ProductListContract.View {
+class ProductListFragment : Fragment(), ProductListContract.View {
     companion object {
         @JvmStatic
         fun newInstance() = ProductListFragment()
+    }
+
+    lateinit var listPresenter: ProductListPresenter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        listPresenter = ProductListPresenter(App.repository(activity!!))
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_product_list, container, false)
+    ): View? = inflater.inflate(
+        R.layout.fragment_product_list,
+        container,
+        false
+    )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         listPresenter.attach(this)
 
         fab_new_product.setOnClickListener {
-            //openProductFragmentFor(Product())
-
-            // todo for test purpose
-            var product = Product()
-            Realm.getDefaultInstance().executeTransaction {
-                product = it.copyFromRealm(it.createObject(Product::class.java, UUID.randomUUID().toString()))
-                product.name = "name"
-                product.price = 21.0
-            }
-            openProductFragmentFor(product)
+            openProductFragmentFor(Product())
         }
 
         listPresenter.loadProducts()
@@ -65,11 +63,16 @@ class ProductListFragment(
             .show()
     }
 
-    override fun loadDataSuccess(products: RealmResults<Product>) {
-        list_recycler_view.adapter = ProductListAdapter(products,
-            onItemClickAction = { product ->
-                openProductFragmentFor(product)
-            })
+    override fun loadDataSuccess(products: List<Product>) {
+        if (list_recycler_view.adapter == null) {
+            list_recycler_view.adapter = ProductListAdapter(products,
+                onItemClickAction = { product ->
+                    openProductFragmentFor(product)
+                })
+        } else {
+            (list_recycler_view.adapter as ProductListAdapter)
+                .productList = products
+        }
     }
 
     private fun openProductFragmentFor(product: Product) {
