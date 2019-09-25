@@ -7,6 +7,7 @@ interface ProductDetailContract {
         fun hideFragment()
         fun setNameDataToView(name: String)
         fun setPriceDataToView(price: String)
+        fun setImageDataToView(imageUri: String)
     }
 
     interface Presenter : BaseContract.Presenter<View> {
@@ -14,5 +15,6 @@ interface ProductDetailContract {
         fun deleteProduct()
         fun isNewProduct(): Boolean
         fun setProductDataToViews()
+        fun setProductImagePath(imagePathUri: String)
     }
 }

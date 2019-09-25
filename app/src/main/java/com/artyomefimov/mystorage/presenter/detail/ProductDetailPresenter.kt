@@ -31,6 +31,7 @@ class ProductDetailPresenter(
 
         val price = if (product.price == 0.0) "" else product.price.toString()
         view.setPriceDataToView(price)
+        view.setImageDataToView(product.imagePath)
     }
 
     override fun isNewProduct(): Boolean =
@@ -45,6 +46,10 @@ class ProductDetailPresenter(
     fun setInitialViewState(viewState: ViewState) =
         viewStateController.setInitialViewState(viewState)
 
+    override fun setProductImagePath(imagePathUri: String) {
+        product.imagePath = imagePathUri
+    }
+
     fun areNameAndPriceCorrect(name: String, price: String): Boolean {
         return when {
             name.isEmpty() or name.isBlank() -> {
@@ -55,16 +60,13 @@ class ProductDetailPresenter(
                 view.showMessage(incorrectPriceMessage)
                 false
             }
-            else -> {
-                product.name = name
-                product.price = price.toDouble()
-                true
-            }
+            else -> true
         }
     }
 
     override fun saveProduct(name: String, price: String) {
         if (areNameAndPriceCorrect(name, price)) {
+            applyDataFromViews(name, price)
             generateIdIfProductIsNew()
 
             updateSubscription = productRepository.save(product)
@@ -81,6 +83,11 @@ class ProductDetailPresenter(
                 )
             compositeDisposable.add(updateSubscription!!)
         }
+    }
+
+    private fun applyDataFromViews(name: String, price: String) {
+        product.name = name.trim()
+        product.price = price.toDouble()
     }
 
     private fun generateIdIfProductIsNew() {

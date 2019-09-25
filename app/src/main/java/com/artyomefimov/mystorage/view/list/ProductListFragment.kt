@@ -1,5 +1,6 @@
 package com.artyomefimov.mystorage.view.list
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,8 +13,7 @@ import com.artyomefimov.mystorage.presenter.list.ProductListContract
 import com.artyomefimov.mystorage.presenter.list.ProductListPresenter
 import com.artyomefimov.mystorage.view.MainActivity
 import com.artyomefimov.mystorage.view.detail.ProductDetailFragment
-import com.artyomefimov.mystorage.view.utils.showSnackbarWithMessage
-import com.google.android.material.snackbar.Snackbar
+import com.artyomefimov.mystorage.view.utils.*
 import kotlinx.android.synthetic.main.fragment_product_list.*
 
 class ProductListFragment : Fragment(), ProductListContract.View {
@@ -67,6 +67,9 @@ class ProductListFragment : Fragment(), ProductListContract.View {
             list_recycler_view.adapter = ProductListAdapter(products,
                 onItemClickAction = { product ->
                     openProductFragmentFor(product)
+                },
+                loadImage = {product, imageView ->
+                    loadImageFrom(activity!!, Uri.parse(product.imagePath), imageView)
                 })
         } else {
             (list_recycler_view.adapter as ProductListAdapter)

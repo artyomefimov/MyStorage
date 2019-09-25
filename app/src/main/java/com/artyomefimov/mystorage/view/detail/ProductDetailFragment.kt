@@ -1,5 +1,8 @@
 package com.artyomefimov.mystorage.view.detail
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -9,15 +12,14 @@ import com.artyomefimov.mystorage.model.Product
 import com.artyomefimov.mystorage.presenter.detail.ProductDetailContract
 import com.artyomefimov.mystorage.presenter.detail.ProductDetailPresenter
 import com.artyomefimov.mystorage.view.detail.viewstate.ViewState
-import com.artyomefimov.mystorage.view.utils.showSnackbarWithAction
-import com.artyomefimov.mystorage.view.utils.showSnackbarWithMessage
-import com.google.android.material.snackbar.Snackbar
+import com.artyomefimov.mystorage.view.utils.*
 import kotlinx.android.synthetic.main.fragment_product_detail.*
 
 class ProductDetailFragment : Fragment(), ProductDetailContract.View {
     companion object {
         private const val PRODUCT = "product"
         private const val VIEW_STATE = "view_state"
+        internal const val PICK_IMAGE_REQUEST_CODE = 1201
 
         @JvmStatic
         fun newInstance(product: Product) =
@@ -90,7 +92,8 @@ class ProductDetailFragment : Fragment(), ProductDetailContract.View {
     ): View? = inflater.inflate(
         R.layout.fragment_product_detail,
         container,
-        false)
+        false
+    )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -105,6 +108,10 @@ class ProductDetailFragment : Fragment(), ProductDetailContract.View {
             )
         }
 
+        product_image_view.setOnClickListener {
+            chooseImageForProduct()
+        }
+
         productPresenter.setProductDataToViews()
     }
 
@@ -114,6 +121,10 @@ class ProductDetailFragment : Fragment(), ProductDetailContract.View {
 
     override fun setPriceDataToView(price: String) {
         price_edit_text.setText(price)
+    }
+
+    override fun setImageDataToView(imageUri: String) {
+        loadImageFrom(activity!!, Uri.parse(imageUri), product_image_view)
     }
 
     override fun showMessage(message: String) {
@@ -130,6 +141,18 @@ class ProductDetailFragment : Fragment(), ProductDetailContract.View {
 
     override fun hideFragment() {
         activity?.onBackPressed()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, resultIntent: Intent?) {
+        if (Activity.RESULT_OK != resultCode)
+            return
+        if (PICK_IMAGE_REQUEST_CODE == requestCode) {
+            val imagePathUri = resultIntent?.data!!
+
+            activity!!.contentResolver.takePersistableUriPermission(imagePathUri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            loadImageFrom(activity!!, imagePathUri, product_image_view)
+            productPresenter.setProductImagePath(imagePathUri.toString())
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

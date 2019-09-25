@@ -5,7 +5,7 @@ import com.artyomefimov.mystorage.model.Product
 
 @Dao
 interface ProductDao {
-    @Query("select * from product")
+    @Query("select * from product order by name asc")
     fun findAll(): List<Product>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
