@@ -70,7 +70,8 @@ class ProductListFragment : Fragment(), ProductListContract.View {
                     openProductFragmentFor(product)
                 },
                 loadImage = { product, imageView ->
-                    loadImageFrom(activity!!, Uri.parse(product.imagePath), imageView)
+                    if (product.imagePath.isNotEmpty())
+                        loadImageFrom(activity!!, Uri.parse(product.imagePath), imageView)
                 })
         } else {
             (list_recycler_view.adapter as ProductListAdapter)

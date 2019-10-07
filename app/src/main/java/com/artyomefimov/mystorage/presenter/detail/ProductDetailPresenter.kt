@@ -31,7 +31,8 @@ class ProductDetailPresenter(
 
         val price = if (product.price == 0.0) "" else product.price.toString()
         view.setPriceDataToView(price)
-        view.setImageDataToView(product.imagePath)
+        if (product.imagePath.isNotEmpty())
+            view.setImageDataToView(product.imagePath)
     }
 
     override fun isNewProduct(): Boolean =
